@@ -1,0 +1,5 @@
+{
+    "cli_test": "newvalue/",
+    "cli_test2": "12341234",
+    "cli_test3": "https://grouplens.org/datasets/movielens/latest/"
+}
