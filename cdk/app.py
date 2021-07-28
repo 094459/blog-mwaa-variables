@@ -20,7 +20,6 @@ env_EU=core.Environment(region="eu-central-1", account="704533066374")
 mwaa_props = {
     'dagss3location': 'airflow-demo-var',
     'mwaa_env' : 'airflow-demo-var',
-    #'mwaa_secrets' : 'airflow/variables',
     'mwaa_secrets_conn' : 'airflow/connections',
     'mwaa_secrets_var' : 'airflow/variables'
     }
