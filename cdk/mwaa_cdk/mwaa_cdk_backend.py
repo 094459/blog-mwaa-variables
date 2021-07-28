@@ -1,3 +1,6 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
 from aws_cdk import core
 import aws_cdk.aws_ec2 as ec2
 import aws_cdk.aws_s3 as s3
