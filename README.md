@@ -1,6 +1,8 @@
 ### How to use this repository
 
-These scripts and DAGs are used in the blog post Working with parameters and variables in your Amazon Managed Workflows for Apache Airflow environment.
+These scripts and DAGs are used in the blog post, [Working with parameters and variables in Amazon Managed Workflows for Apache Airflow](https://aws-oss.beachgeek.co.uk/ru)
+
+As part of that blog post, you will learn how to work with variables and parameters in MWAA, and I used a MWAA environment setup using AWS CDK. You will find that in the cdk folder of this repository.
 
 **MWAA CDK**
 
@@ -19,7 +21,7 @@ mwaa_props = {
     'mwaa_secrets_var' : 'airflow/variables'
 ```
 
-2. Once updated and saved, you can deploy with the following commands
+2. Once updated and saved, you can deploy with the following commands (once checked out, you will be in the cdk folder)
 
 ```
 cdk deploy mwaa-network
