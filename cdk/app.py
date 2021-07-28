@@ -7,8 +7,7 @@ from aws_cdk import core
 
 from mwaa_cdk.mwaa_cdk_backend import MwaaCdkStackBackend
 from mwaa_cdk.mwaa_cdk_env import MwaaCdkStackEnv
-from mwaa_cdk.mwaa_bastion import MwaaCdkStackBastion
-from mwaa_cdk.mwaa_cdk_cicd import MwaaCdkStackCICD
+
 
 
 # Chnage the mwaa_secret to the identifier you have used
@@ -29,28 +28,6 @@ app = core.App()
 mwaa_backend = MwaaCdkStackBackend(
     scope=app,
     id="mwaa-network",
-    env=env_EU,
-    mwaa_props=mwaa_props
-)
-
-# To do - not currently implemented so check back
-# later 
-
-mwaa_cicd = MwaaCdkStackCICD(
-    scope=app,
-    id="mwaa-cicd",
-    env=env_EU,
-    vpc=mwaa_backend.vpc,
-    mwaa_props=mwaa_props
-)
-# If you want to configure a Private MWAA environment
-# You can deploy the bastion stack which will give you 
-# an endpoint on which to create your ssh-tunnel
-
-mwaa_bastion = MwaaCdkStackBastion(
-    scope=app,
-    id="mwaa-bastion",
-    vpc=mwaa_backend.vpc,
     env=env_EU,
     mwaa_props=mwaa_props
 )
