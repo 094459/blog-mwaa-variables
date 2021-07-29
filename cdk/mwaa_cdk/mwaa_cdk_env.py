@@ -36,6 +36,13 @@ class MwaaCdkStackEnv(core.Stack):
         
         dags_bucket_arn = dags_bucket.bucket_arn
 
+        # define your own KMS key to encrypt everything
+        # can disable this, make sure you alter the IAM policy if you do that
+        # change the line  f"arn:aws:kms:{self.region}:{self.account}:key/{key.key_id}" to "*"
+
+        key = kms.Key(self, f"{mwaa_props['mwaa_env']}Key", enable_key_rotation=True)
+        key.add_alias(f"alias/{mwaa_props['mwaa_env']}")    
+
         # Create MWAA IAM Policies and Roles, copied from MWAA documentation site
 
         mwaa_policy_document = iam.PolicyDocument(
@@ -57,7 +64,9 @@ class MwaaCdkStackEnv(core.Stack):
                 ),
                 iam.PolicyStatement(
                     actions=[
-                        "s3:*"
+                        "s3:GetObject*",
+                        "s3:GetBucket*",
+                        "s3:List*"
                     ],
                     effect=iam.Effect.ALLOW,
                     resources=[
@@ -99,13 +108,16 @@ class MwaaCdkStackEnv(core.Stack):
                 ),
                 iam.PolicyStatement(
                     actions=[
-                        "kms:Decrypt",
-                        "kms:DescribeKey",
+                        "kms:Decrypt*",
+                        "kms:Describe*",
+                        "kms:ReEncrypt*",
                         "kms:GenerateDataKey*",
-                        "kms:Encrypt",
+                        "kms:Encrypt*"
                     ],
                     effect=iam.Effect.ALLOW,
-                    resources=["*"],
+                    resources=[
+                        f"arn:aws:kms:{self.region}:{self.account}:key/{key.key_id}"
+                        ],                 
                     conditions={
                         "StringEquals": {
                             "kms:ViaService": [
@@ -214,10 +226,7 @@ class MwaaCdkStackEnv(core.Stack):
             'service': 'MWAA Apache AirFlow'
         }
         
-        # optional if you want to define your own KMS key
 
-        #key = kms.Key(self, f"{mwaa_props['mwaa_env']}Key", enable_key_rotation=True)
-        #key.add_alias(f"alias/{mwaa_props['mwaa_env']}")    
         
         # Create MWAA environment using all the info above
 
@@ -231,7 +240,7 @@ class MwaaCdkStackEnv(core.Stack):
             dag_s3_path="dags",
             environment_class='mw1.small',
             execution_role_arn=mwaa_service_role.role_arn,
-            #kms_key=key.key_id,
+            kms_key=key.key_id,
             logging_configuration=logging_configuration,
             max_workers=5,
             network_configuration=network_configuration,
